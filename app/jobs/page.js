@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 
@@ -21,7 +21,7 @@ const locationColors = {
     'onsite': '#8080a8',
 };
 
-export default function JobsPage() {
+function JobsContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -126,13 +126,9 @@ export default function JobsPage() {
                 <aside>
                     <div style={{ padding: '1.5rem', borderRadius: '16px', background: '#13131f', border: '1px solid #2e2e4e', position: 'sticky', top: '90px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, color: '#f0f0ff', fontSize: '1rem' }}>Filters</h3>
-                            {(category || jobType || locationType) && (
-                                <button onClick={function () { setCategory(''); setJobType(''); setLocationType(''); setPage(1); }}
-                                    style={{ fontSize: '12px', color: '#f87171', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
-                                    Clear All
-                                </button>
-                            )}
+                            <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, color: '#f0f0ff', fontSize: '15px' }}>Filters</span>
+                            <button onClick={function () { setCategory(''); setJobType(''); setLocationType(''); setPage(1); }}
+                                style={{ fontSize: '12px', color: '#8b5cf6', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>Clear all</button>
                         </div>
 
                         {/* Category */}
@@ -266,5 +262,17 @@ export default function JobsPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function JobsPage() {
+    return (
+        <Suspense fallback={
+            <div style={{ minHeight: '100vh', paddingTop: '5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ color: '#8080a8', fontSize: '16px' }}>Loading jobs...</div>
+            </div>
+        }>
+            <JobsContent />
+        </Suspense>
     );
 }
