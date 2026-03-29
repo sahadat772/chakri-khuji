@@ -8,7 +8,20 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, select: false },
-  role: { type: String, enum: ['candidate', 'company'], required: true },
+  
+  // ✅ required: true সরিয়ে default দিলাম
+  role: { 
+    type: String, 
+    enum: ['candidate', 'company'], 
+    default: 'candidate'  // OAuth user default candidate হবে
+  },
+  
+  // ✅ provider field add করলাম
+  provider: { 
+    type: String, 
+    default: 'credentials'  // google, github, credentials
+  },
+
   username: { type: String, required: true, unique: true },
   image: { type: String, default: '' },
   bio: { type: String, default: '' },
